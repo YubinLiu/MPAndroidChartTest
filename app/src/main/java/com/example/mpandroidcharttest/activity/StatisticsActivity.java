@@ -1,0 +1,71 @@
+package com.example.mpandroidcharttest.activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+
+import com.example.mpandroidcharttest.R;
+import com.example.mpandroidcharttest.fragment.PlayerGamesStatisticsFragment;
+import com.example.mpandroidcharttest.fragment.TeamWinTimesFragment;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class StatisticsActivity extends AppCompatActivity {
+    
+    public static final int TEAM_STATISTICS = 0;
+
+    public static final int PLAYER_STATISTICS = 1;
+
+    private Button testChangeFragment;
+
+    private int clickTime = 1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_statistics);
+
+        replaceFragment(new TeamWinTimesFragment());
+
+        testChangeFragment = (Button) findViewById(R.id.test_change_fragment);
+        testChangeFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (clickTime % 2 == 0) {
+                    clickTime++;
+                    replaceFragment(new TeamWinTimesFragment());
+                } else {
+                    clickTime++;
+                    replaceFragment(new PlayerGamesStatisticsFragment());
+                }
+            }
+        });
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
+    /**
+     *
+     * @param context 启动该Activity的Context
+     * @param bundles 包含总出场、总得分、平均分、赛季信息
+     * @param type 启动本Activity的类型
+     * @param keys Bundle中的键的名称
+     */
+    public static void actionStart(Context context, List<Bundle> bundles, int type, String... keys) {
+        Intent intent = new Intent(context, StatisticsActivity.class);
+        intent.putExtra("bundles", (Serializable) bundles);
+        context.startActivity(intent);
+    }
+}
