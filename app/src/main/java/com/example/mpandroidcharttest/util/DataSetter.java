@@ -25,11 +25,13 @@ public class DataSetter {
     }
 
     //设置柱状图数据
-    public static void setBarData(Chart chart, int count, float range) {
+    public static void setBarData(Chart chart,
+                                  List<String> xValuesList,
+                                  List<Float> yValuesList) {
         List<BarEntry> yVals1 = new ArrayList<>();
 
-        for (int i = 0; i < count; i++) {
-            float val = (float) (Math.random() * range);
+        for (int i = 0; i < xValuesList.size(); i++) {
+            float val = yValuesList.get(i);
             yVals1.add(new BarEntry(i, val));
         }
 
@@ -57,11 +59,13 @@ public class DataSetter {
     }
 
     //设置折线图数据
-    public static void setLineData(Chart chart, int count, float range) {
+    public static void setLineData(Chart chart,
+                                   List<String> seasons,
+                                   List<Float> playerDatas) {
         List<Entry> yVals1 = new ArrayList<>();
 
-        for (int i = 0; i < count; i++) {
-            int val = (int) (Math.random() * range);
+        for (int i = 0; i < seasons.size(); i++) {
+            float val = playerDatas.get(i);
             yVals1.add(new Entry(i, val));
         }
 

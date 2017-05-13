@@ -14,15 +14,21 @@ import java.util.List;
 
 public class ChartStyleSetter {
 
-    public static void setChartStyle(Chart chart, int years) {
+    /**
+     *
+     * @param chart 图表类
+     * @param xValuesList 球队名称或赛季
+     */
+    public static void setChartStyle(Chart chart, List<String> xValuesList) {
+
         //设置相关属性
         chart.getDescription().setEnabled(false);
         chart.setBackgroundColor(0xff000000);
 
         List<String> xVals = new ArrayList<>();
 
-        for (int i = 0; i < years; i++) {
-            xVals.add(Integer.toString(199999 + i));
+        for (int i = 0; i < xValuesList.size(); i++) {
+            xVals.add(xValuesList.get(i));
         }
 
         //x轴
@@ -33,7 +39,7 @@ public class ChartStyleSetter {
         xl.setTextColor(0xffffffff);
         xl.setDrawGridLines(false);
         //显示个数
-        xl.setLabelCount(years);
+        xl.setLabelCount(xValuesList.size());
         if (chart instanceof HorizontalBarChart) {
             xl.setLabelRotationAngle(0);
         }else {

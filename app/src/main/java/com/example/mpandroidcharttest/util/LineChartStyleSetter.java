@@ -3,14 +3,16 @@ package com.example.mpandroidcharttest.util;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
 
+import java.util.List;
+
 /**
  * Created by yubin on 2017/5/9.
  */
 
 public class LineChartStyleSetter extends ChartStyleSetter {
 
-    public static void setLineChartStyle(LineChart chart, int years) {
-        setChartStyle(chart, years);
+    public static void setLineChartStyle(LineChart chart, List<String> xValuesList) {
+        setChartStyle(chart, xValuesList);
 
         //y轴
         YAxis yl = chart.getAxisLeft();

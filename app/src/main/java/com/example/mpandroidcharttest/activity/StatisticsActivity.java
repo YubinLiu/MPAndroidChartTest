@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.mpandroidcharttest.R;
 import com.example.mpandroidcharttest.fragment.PlayerGamesStatisticsFragment;
@@ -23,30 +21,19 @@ public class StatisticsActivity extends AppCompatActivity {
 
     public static final int PLAYER_STATISTICS = 1;
 
-    private Button testChangeFragment;
-
-    private int clickTime = 1;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
 
-        replaceFragment(new TeamWinTimesFragment());
-
-        testChangeFragment = (Button) findViewById(R.id.test_change_fragment);
-        testChangeFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (clickTime % 2 == 0) {
-                    clickTime++;
-                    replaceFragment(new TeamWinTimesFragment());
-                } else {
-                    clickTime++;
-                    replaceFragment(new PlayerGamesStatisticsFragment());
-                }
-            }
-        });
+        intent = getIntent();
+        if (intent.getIntExtra("type", 0) == TEAM_STATISTICS) {
+            replaceFragment(new TeamWinTimesFragment());
+        } else if (intent.getIntExtra("type", 0) == PLAYER_STATISTICS) {
+            replaceFragment(new PlayerGamesStatisticsFragment());
+        }
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -66,6 +53,12 @@ public class StatisticsActivity extends AppCompatActivity {
     public static void actionStart(Context context, List<Bundle> bundles, int type, String... keys) {
         Intent intent = new Intent(context, StatisticsActivity.class);
         intent.putExtra("bundles", (Serializable) bundles);
+        intent.putExtra("type", type);
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("keys", keys);
+        intent.putExtras(bundle);
+
         context.startActivity(intent);
     }
 }

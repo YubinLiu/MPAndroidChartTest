@@ -3,14 +3,16 @@ package com.example.mpandroidcharttest.util;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.YAxis;
 
+import java.util.List;
+
 /**
  * Created by yubin on 2017/5/9.
  */
 
 public class BarChartSytleSetter extends ChartStyleSetter {
 
-    public static void setBarChartStyle(BarChart chart, int years) {
-        setChartStyle(chart, years);
+    public static void setBarChartStyle(BarChart chart, List<String> xValuesList) {
+        setChartStyle(chart, xValuesList);
 
         //y轴
         YAxis yl = chart.getAxisLeft();

@@ -3,14 +3,16 @@ package com.example.mpandroidcharttest.util;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.YAxis;
 
+import java.util.List;
+
 /**
  * Created by yubin on 2017/5/11.
  */
 
 public class HorizontalBarChartStyleSetter extends ChartStyleSetter {
 
-    public static void setHorizontalBarChartStyle(HorizontalBarChart chart, int teamCounts) {
-        setChartStyle(chart, teamCounts);
+    public static void setHorizontalBarChartStyle(HorizontalBarChart chart, List<String> xValuesList) {
+        setChartStyle(chart, xValuesList);
 
         //y轴
         YAxis yl = chart.getAxisLeft();

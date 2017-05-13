@@ -1,5 +1,6 @@
 package com.example.mpandroidcharttest.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,10 +17,19 @@ import com.example.mpandroidcharttest.util.LineChartStyleSetter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PlayerGamesStatisticsFragment extends Fragment {
+
+    private static final String PLAYER_GAMES = "出场次数";
+
+    private static final String PLAYER_TOTAL_POINTS = "赛季总得分";
+
+    private static final String PLAYER_AVERAGE_POINTS = "赛季平均得分";
 
     private RecyclerView mAnalysisRecyclerView;
 
@@ -29,21 +39,23 @@ public class PlayerGamesStatisticsFragment extends Fragment {
 
     private Button mPlayerAveragePointsAnalysis;
 
-    private int mYears;
+    private List<Bundle> mBundleList = new ArrayList<>();
 
-    private int mPlayerDatas;
+    private List<Float> mPlayerPoints = new ArrayList<>();
 
-    private static final String PLAYER_GAMES = "出场次数";
+    private List<Float> mPlayerGames = new ArrayList<>();
 
-    private static final String PLAYER_TOTAL_POINTS = "赛季总得分";
+    private List<Float> mPlayerAveragePoints = new ArrayList<>();
 
-    private static final String PLAYER_AVERAGE_POINTS = "赛季平均得分";
+    private List<String> mPlayerSeasons = new ArrayList<>();
+
+    private List<Float> mPlayerDatas = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mYears = 10;
-        mPlayerDatas = 80;
+        parsePlayerActionStartData();
+        mPlayerDatas = mPlayerGames;
         DataSetter.setType(PLAYER_GAMES);
 
         View v = inflater.inflate(
@@ -61,7 +73,7 @@ public class PlayerGamesStatisticsFragment extends Fragment {
         mPlayerGamesAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPlayerDatas = 80;
+                mPlayerDatas = mPlayerGames;
                 DataSetter.setType(PLAYER_GAMES);
                 adapter.notifyDataSetChanged();
             }
@@ -71,7 +83,7 @@ public class PlayerGamesStatisticsFragment extends Fragment {
         mPlayerTotalPointsAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPlayerDatas = 1200;
+                mPlayerDatas = mPlayerPoints;
                 DataSetter.setType(PLAYER_TOTAL_POINTS);
                 adapter.notifyDataSetChanged();
             }
@@ -81,7 +93,7 @@ public class PlayerGamesStatisticsFragment extends Fragment {
         mPlayerAveragePointsAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPlayerDatas = 25;
+                mPlayerDatas = mPlayerAveragePoints;
                 DataSetter.setType(PLAYER_AVERAGE_POINTS);
                 adapter.notifyDataSetChanged();
             }
@@ -137,13 +149,13 @@ public class PlayerGamesStatisticsFragment extends Fragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if (holder instanceof BarChartAnalysisHolder) {
                 BarChart chart = ((BarChartAnalysisHolder) holder).mBarChart;
-                BarChartSytleSetter.setBarChartStyle(chart, mYears);
-                DataSetter.setBarData(chart, mYears, mPlayerDatas);
+                BarChartSytleSetter.setBarChartStyle(chart, mPlayerSeasons);
+                DataSetter.setBarData(chart, mPlayerSeasons, mPlayerDatas);
             }
             if (holder instanceof LineChartAnalysisHolder) {
                 LineChart chart = ((LineChartAnalysisHolder) holder).mLineChart;
-                LineChartStyleSetter.setLineChartStyle((((LineChartAnalysisHolder) holder).mLineChart), mYears);
-                DataSetter.setLineData(chart, mYears, mPlayerDatas);
+                LineChartStyleSetter.setLineChartStyle((((LineChartAnalysisHolder) holder).mLineChart), mPlayerSeasons);
+                DataSetter.setLineData(chart, mPlayerSeasons, mPlayerDatas);
             }
         }
 
@@ -155,6 +167,19 @@ public class PlayerGamesStatisticsFragment extends Fragment {
         @Override
         public int getItemCount() {
             return 2;
+        }
+    }
+
+    private void parsePlayerActionStartData() {
+        Intent intent = getActivity().getIntent();
+        String[] keys = intent.getStringArrayExtra("keys");
+        mBundleList = (List<Bundle>) intent.getSerializableExtra("bundles");
+        for (int i = 0; i < mBundleList.size(); i++) {
+            Bundle bundle = mBundleList.get(i);
+            mPlayerPoints.add(bundle.getFloat(keys[0]));
+            mPlayerGames.add(bundle.getFloat(keys[1]));
+            mPlayerAveragePoints.add(bundle.getFloat(keys[2]));
+            mPlayerSeasons.add(bundle.getString(keys[3]));
         }
     }
 }
